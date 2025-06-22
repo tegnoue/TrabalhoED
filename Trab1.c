@@ -16,6 +16,29 @@ Alunos: Guilherme Ferreira Brandão   231030691
 #include <stdio.h>
 #include <stdlib.h>
 
+//Essa parte do código é pra garantir que o sleep (delay) funcione
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
+
+void delay(unsigned int tempo) {
+#ifdef _WIN32
+    Sleep(tempo * 1000); 
+#else
+    sleep(tempo);
+#endif
+}
+
+void limparTela(){
+        #ifdef _WIN32
+    system("cls");
+    #else
+    system("clear");
+  #endif
+    }
+
 typedef struct fila Fila;
 typedef struct filano FilaNo;
 typedef struct pessoa Pessoa;
@@ -23,6 +46,7 @@ typedef struct pessoa Pessoa;
   struct pessoa{
       char nome[100];
       int id;
+      int servico;
   };
 
   struct fila{
@@ -60,23 +84,112 @@ typedef struct pessoa Pessoa;
 
     };
 
+    Pessoa remover(Fila* f){
+        FilaNo* temp = f->prim;
+        Pessoa clienteSelecionado = temp->cliente;
+        f->prim = f->prim->prox;
+        if (f->prim == NULL) {
+            f->ult = NULL;
+        }
+        free(temp);
+        return clienteSelecionado;
+    };
 
+    
+    void buscar(Fila* f, char clienteProcurado[100]){
+      int contador = 1;
+      for (FilaNo* p = f->prim; p != NULL; p = p->prox)
+      {
+        if(p->cliente.nome == clienteProcurado){
+          printf("A posição de %s na fila eh: %d", clienteProcurado, contador);
+        }
+        contador++;
+      }      
+      printf("Não foi encontrado o cliente em questão.");
+    }
 
+    void imprimeFila(Fila* f){
+      int contador = 1;
+      for (FilaNo* p = f->prim; p != NULL; p = p->prox)
+      {
+        printf("%d - %s - %d\n", contador, p->cliente.nome, p->cliente.servico);
+        contador++;
+      }
+    }
 
+    void opcaoUm(Fila* f){
+      char nomeCliente[100];
+      int servico;
+      printf("Digite o nome do cliente: ");
+      scanf("%c", nomeCliente[100]);
+      printf("Agora escolha o serviço:\n1 - Barba\n2 - Barba e Cabelo\n3 - Cabelo\n");
+      scanf("%d", servico);
 
+    }
 
+    void opcaoDois(Fila* f){
+      limparTela();
+      if (f->prim == NULL) {
+          printf("Fila vazia!\n");
+      } else{
+      Pessoa proximoCliente = remover(f);
+      printf("É a vez de %s", proximoCliente.nome);
+      }
 
+    }
 
+    void opcaoTres(Fila* f){
+      limparTela();
+      imprimeFila(f);
+    }
 
+    void opcaoQuatro(Fila* f){
+      char nomeCliente[100];
+      limparTela();
+      print("Digite o nome do cliente:");
+      scanf("%c", &nomeCliente);
+      buscar(f, nomeCliente);
+    }
+    
+    void menuInicial(Fila* f){
+      int escolhaMenu;
+      limparTela();
+      printf("**********************MENU**********************\n\n");
+      printf("1 - Acrescentar cliente na fila\n2 - Retirar o proximo cliente\n3 - Exibir fila completa\n4 - Procurar cliente na fila\n\n Digite a opcao buscada:");
+        scanf("%d", &escolhaMenu);
 
+      switch (escolhaMenu)
+      {
+      case 1:
+        opcaoUm(f);
+        break;
 
+      case 2:
+        opcaoDois(f);
+        break;
 
+      case 3:
+        opcaoTres(f);
+        break;
 
+      case 4:
+        opcaoQuatro(f);
+        break;
+      
+      default:
+        limparTela();
+        printf("Escolha uma opcao valida.\n\n");
+        delay(2);
+        menuInicial(f);
+      }
 
-
+    }
 
 int main(void){
 
+  Fila* fila;
+  int escolhaMenu;
+  menuInicial(fila);
 
   return 0;
 }
