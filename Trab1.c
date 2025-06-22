@@ -3,8 +3,8 @@
 Alunos: Guilherme Ferreira Brandão   231030691
         Guilherme Nascimento Tegnoue 231011909
 
-    Nois Declaramos que  somos autores deste trabalho e que o código não foi copiado
-    de outra pessoa nem repassado para alguém. Estou ciente de que poderei sofrer
+    Nós Declaramos que somos os autores deste trabalho e que o código não foi copiado
+    de outra pessoa nem repassado para alguém. Estamos cientes de que poderemos sofrer
     penalizações na avaliação em caso de detecção de plágio.    
 
   Historia de usuário
