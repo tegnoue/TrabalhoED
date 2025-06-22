@@ -121,9 +121,9 @@ typedef struct pessoa Pessoa;
       char nomeCliente[100];
       int servico;
       printf("Digite o nome do cliente: ");
-      scanf("%c", nomeCliente[100]);
+      scanf("%c", &nomeCliente[100]);
       printf("Agora escolha o serviço:\n1 - Barba\n2 - Barba e Cabelo\n3 - Cabelo\n");
-      scanf("%d", servico);
+      scanf("%d", &servico);
 
     }
 
@@ -146,8 +146,8 @@ typedef struct pessoa Pessoa;
     void opcaoQuatro(Fila* f){
       char nomeCliente[100];
       limparTela();
-      print("Digite o nome do cliente:");
-      scanf("%c", &nomeCliente);
+      printf("Digite o nome do cliente:");
+      scanf("%c", &nomeCliente[100]);
       buscar(f, nomeCliente);
     }
     
