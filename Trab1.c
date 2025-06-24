@@ -15,6 +15,7 @@ Alunos: Guilherme Ferreira Brandão   231030691
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 //Essa parte do código é pra garantir que o sleep (delay) funcione
 #ifdef _WIN32
@@ -100,8 +101,9 @@ typedef struct pessoa Pessoa;
       int contador = 1;
       for (FilaNo* p = f->prim; p != NULL; p = p->prox)
       {
-        if(p->cliente.nome == clienteProcurado){
-          printf("A posição de %s na fila eh: %d", clienteProcurado, contador);
+        if(strcmp(p->cliente.nome , clienteProcurado)==0){
+          printf("A posição de %s na fila eh: %d\n", clienteProcurado, contador);
+          return;
         }
         contador++;
       }      
@@ -117,15 +119,18 @@ typedef struct pessoa Pessoa;
       }
     }
 
-    void opcaoUm(Fila* f){
-      char nomeCliente[100];
-      int servico;
-      printf("Digite o nome do cliente: ");
-      scanf("%c", &nomeCliente[100]);
-      printf("Agora escolha o serviço:\n1 - Barba\n2 - Barba e Cabelo\n3 - Cabelo\n");
-      scanf("%d", &servico);
-
-    }
+  void opcaoUm(Fila* f){
+    char nomeCliente[100];
+    int servico;
+    Pessoa novoCliente;
+    printf("Digite o nome do cliente: ");
+    scanf(" %[^\n]", nomeCliente);
+    strcpy(novoCliente.nome, nomeCliente);
+    printf("Agora escolha o serviço:\n1 - Barba\n2 - Barba e Cabelo\n3 - Cabelo\n");
+    scanf("%d", &servico);
+    novoCliente.servico = servico;
+    inserir(f, novoCliente);
+  }
 
     void opcaoDois(Fila* f){
       limparTela();
@@ -147,49 +152,64 @@ typedef struct pessoa Pessoa;
       char nomeCliente[100];
       limparTela();
       printf("Digite o nome do cliente:");
-      scanf("%c", &nomeCliente[100]);
+      scanf(" %[^\n]", nomeCliente);
       buscar(f, nomeCliente);
     }
-    
-    void menuInicial(Fila* f){
-      int escolhaMenu;
-      limparTela();
-      printf("**********************MENU**********************\n\n");
-      printf("1 - Acrescentar cliente na fila\n2 - Retirar o proximo cliente\n3 - Exibir fila completa\n4 - Procurar cliente na fila\n\n Digite a opcao buscada:");
-        scanf("%d", &escolhaMenu);
-
-      switch (escolhaMenu)
-      {
-      case 1:
-        opcaoUm(f);
-        break;
-
-      case 2:
-        opcaoDois(f);
-        break;
-
-      case 3:
-        opcaoTres(f);
-        break;
-
-      case 4:
-        opcaoQuatro(f);
-        break;
-      
-      default:
-        limparTela();
-        printf("Escolha uma opcao valida.\n\n");
-        delay(2);
-        menuInicial(f);
-      }
+    void enterToBack(){
+      printf("\n[ENTER para volta]\n\n");
+      while (getchar() != '\n');
+        getchar();
 
     }
+    
+void menuInicial(Fila* f){
+    int escolhaMenu;
+    int rodando = 1;
+    while (rodando) {
+        limparTela();
+        printf("**********************MENU**********************\n\n");
+        printf("1 - Acrescentar cliente na fila\n");
+        printf("2 - Retirar o proximo cliente\n");
+        printf("3 - Exibir fila completa\n");
+        printf("4 - Procurar cliente na fila\n");
+        printf("5 - Fechar \n\n");
+        printf("Digite a opcao: ");
+        scanf("%d", &escolhaMenu);
+
+        switch (escolhaMenu)
+        {
+            case 1:
+                opcaoUm(f);
+                enterToBack();
+                break;
+            case 2:
+                opcaoDois(f);
+                enterToBack();
+                break;
+            case 3:
+                opcaoTres(f);
+                enterToBack();
+                break;
+            case 4:
+                opcaoQuatro(f);
+                enterToBack();
+                break;
+            case 5:
+              rodando = 0; 
+                break;
+
+            default:
+                limparTela();
+                printf("Escolha uma opcao valida.\n\n");
+                delay(2);
+        }
+    }
+}
 
 int main(void){
-
-  Fila* fila;
-  int escolhaMenu;
-  menuInicial(fila);
-
-  return 0;
+    Fila* fila = criaFila();
+    menuInicial(fila);
+    printf("Programa encerrado.\n");
+    return 0;
 }
+
